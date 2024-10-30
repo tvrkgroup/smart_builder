@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management</title>
+    <style>
+        /* Basic styling for clarity */
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: auto; padding: 20px; }
+        .task { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; }
+        .task h3 { margin: 0; }
+        form input, form textarea, form button { width: 100%; margin: 5px 0; padding: 8px; }
+        form textarea { resize: vertical; }
+
+        /* Styling for update modal */
+        #updateModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        #updateModalContent {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Form -->
+        <div id="loginForm">
+            <h2>Login</h2>
+            <input type="text" id="login_username" placeholder="Username" required>
+            <input type="password" id="login_password" placeholder="Password" required>
+            <button onclick="login()">Login</button>
+            <div id="loginMessage"></div>
+        </div>
+
+        <!-- Task Management Area (visible after login) -->
+        <div id="taskManagement" style="display: none;">
+            <h1>Task Management</h1>
+            <button onclick="logout()">Logout</button> <!-- Logout button -->
+
+            <!-- Add Task Form -->
+            <h2>Add Task</h2>
+            <form id="addTaskForm">
+                <input type="text" id="title" placeholder="Title" required><br>
+                <textarea id="description" placeholder="Description" required></textarea><br>
+                <input type="text" id="status" placeholder="Status (To Do, In Progress, Completed)" required><br>
+                <input type="date" id="due_date" required><br>
+                <input type="number" id="assigned_to" placeholder="Assigned To (ID)" required><br>
+                <button type="submit">Add Task</button>
+            </form>
+
+            <!-- Display Tasks -->
+            <h2>All Tasks</h2>
+            <div id="taskList"></div>
+        </div>
+    </div>
+
+    <!-- Update Task Modal -->
+    <div id="updateModal">
+        <div id="updateModalContent">
+            <h3>Update Task</h3>
+            <form id="updateTaskForm">
+                <input type="text" id="update_title" placeholder="Title" required><br>
+                <textarea id="update_description" placeholder="Description" required></textarea><br>
+                <input type="text" id="update_status" placeholder="Status (To Do, In Progress, Completed)" required><br>
+                <input type="date" id="update_due_date" required><br>
+                <input type="number" id="update_assigned_to" placeholder="Assigned To (ID)" required><br>
+                <button type="submit">Update Task</button>
+                <button type="button" onclick="closeModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Base URL for API
+        const apiUrl = 'http://localhost/smart_builder/tasks.php';
+
+        // Handle login
+	async function login() {
+	    const username = document.getElementById('login_username').value;
+	    const password = document.getElementById('login_password').value;
+	
+	    const response = await fetch('http://localhost/smart_builder/login.php', {
+	        method: 'POST',
+	        headers: { 'Content-Type': 'application/json' },
+	        body: JSON.stringify({ username, password })
+	    });
+	    const result = await response.json();
+	
+	    if (result.message) {
+		//alert("Logged in successfully");
+	        document.getElementById('loginForm').style.display = 'none'; // Hide login form
+	        document.getElementById('taskManagement').style.display = 'block'; // Show task management area
+	        fetchTasks(); // Load tasks after login
+	    } else {
+	        document.getElementById('loginMessage').innerText = result.error;
+	    }
+	}
+
+        // Handle logout
+        async function logout() {
+            const response = await fetch('http://localhost/smart_builder/logout.php', {
+                method: 'POST'
+            });
+            const result = await response.json();
+
+            if (result.message) {
+                document.getElementById('taskManagement').style.display = 'none'; // Hide task management
+                document.getElementById('loginForm').style.display = 'block'; // Show login form
+                document.getElementById('loginMessage').innerText = "Logged out successfully.";
+            }
+        }
+
+        // Fetch and display all tasks
+        async function fetchTasks() {
+            const response = await fetch(apiUrl);
+            const tasks = await response.json();
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+            tasks.forEach(task => {
+                taskList.innerHTML += `
+                    <div class="task">
+                        <h3>${task.title}</h3>
+                        <p>${task.description}</p>
+                        <p>Status: ${task.status}</p>
+                        <p>Due Date: ${task.due_date}</p>
+                        <button onclick="deleteTask(${task.id})">Delete</button>
+                        <button onclick="updateTask(${task.id})">Update</button>
+                    </div>
+                `;
+            });
+        }
+
+        // Add a new task
+        document.getElementById('addTaskForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const task = {
+                project_id: 1,
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                status: document.getElementById('status').value,
+                due_date: document.getElementById('due_date').value,
+                assigned_to: document.getElementById('assigned_to').value
+            };
+            await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(task)
+            });
+            fetchTasks();
+        });
+
+        // Delete a task
+        async function deleteTask(id) {
+            await fetch(`${apiUrl}?id=${id}`, { method: 'DELETE' });
+            fetchTasks();
+        }
+
+        // Placeholder to store ID of task being updated
+        let currentTaskId = null;
+
+        // Function to open the update modal with pre-filled data
+        function updateTask(id) {
+            currentTaskId = id;
+            fetch(`${apiUrl}?id=${id}`)
+                .then(response => response.json())
+                .then(task => {
+                    document.getElementById('update_title').value = task.title;
+                    document.getElementById('update_description').value = task.description;
+                    document.getElementById('update_status').value = task.status;
+                    document.getElementById('update_due_date').value = task.due_date;
+                    document.getElementById('update_assigned_to').value = task.assigned_to;
+                    document.getElementById('updateModal').style.display = 'flex';
+                });
+        }
+
+        // Close the update modal
+        function closeModal() {
+            document.getElementById('updateModal').style.display = 'none';
+            currentTaskId = null;
+        }
+
+        // Handle form submission for updating the task
+        document.getElementById('updateTaskForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const updatedTask = {
+                title: document.getElementById('update_title').value,
+                description: document.getElementById('update_description').value,
+                status: document.getElementById('update_status').value,
+                due_date: document.getElementById('update_due_date').value,
+                assigned_to: document.getElementById('update_assigned_to').value
+            };
+            await fetch(`${apiUrl}?id=${currentTaskId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedTask)
+            });
+            closeModal();
+            fetchTasks();
+        });
+    </script>
+</body>
+</html>
