@@ -40,7 +40,7 @@
             <h2>Login</h2>
             <input type="text" id="login_username" placeholder="Username" required>
             <input type="password" id="login_password" placeholder="Password" required>
-            <button onclick="login()">Login</button>
+            <button type="button" onclick="login()">Login</button>
             <div id="loginMessage"></div>
         </div>
 
@@ -87,26 +87,40 @@
         const apiUrl = 'http://localhost/smart_builder/tasks.php';
 
         // Handle login
-	async function login() {
-	    const username = document.getElementById('login_username').value;
-	    const password = document.getElementById('login_password').value;
-	
-	    const response = await fetch('http://localhost/smart_builder/login.php', {
-	        method: 'POST',
-	        headers: { 'Content-Type': 'application/json' },
-	        body: JSON.stringify({ username, password })
-	    });
-	    const result = await response.json();
-	
-	    if (result.message) {
-		//alert("Logged in successfully");
-	        document.getElementById('loginForm').style.display = 'none'; // Hide login form
-	        document.getElementById('taskManagement').style.display = 'block'; // Show task management area
-	        fetchTasks(); // Load tasks after login
-	    } else {
-	        document.getElementById('loginMessage').innerText = result.error;
-	    }
-	}
+        async function login() {
+            console.log("Login button clicked");
+            const username = document.getElementById("login_username").value;
+            const password = document.getElementById("login_password").value;
+
+            try {
+                const response = await fetch('http://localhost/smart_builder/login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username: username, password: password })
+                });
+
+                if (!response.ok) {
+                    console.error("Network response was not OK");
+                    document.getElementById("loginMessage").innerText = "Network error";
+                    return;
+                }
+
+                const result = await response.json();
+                console.log(result);
+
+                if (result.message === "Login successful") {
+                    document.getElementById("loginForm").style.display = "none";
+                    document.getElementById("taskManagement").style.display = "block";
+                } else {
+                    document.getElementById("loginMessage").innerText = result.error || "An error occurred";
+                }
+            } catch (error) {
+                console.error("Error in login function:", error);
+                document.getElementById("loginMessage").innerText = "Login failed. Please try again.";
+            }
+        }
 
         // Handle logout
         async function logout() {
@@ -116,8 +130,8 @@
             const result = await response.json();
 
             if (result.message) {
-                document.getElementById('taskManagement').style.display = 'none'; // Hide task management
-                document.getElementById('loginForm').style.display = 'block'; // Show login form
+                document.getElementById('taskManagement').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'block';
                 document.getElementById('loginMessage').innerText = "Logged out successfully.";
             }
         }
