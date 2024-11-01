@@ -1,0 +1,357 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fc;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Full-width Header */
+header {
+    width: 100%;
+    background-color: #4a90e2;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+header h1 {
+    font-size: 1.5em;
+    margin-right: auto;
+    text-align: center;
+}
+
+/* Login Form Styling */
+#loginContainer {
+    max-width: 400px; /* Slightly smaller width for the login form */
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#loginContainer h2 {
+    font-size: 1.8em;
+    color: #4a90e2;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+#loginContainer input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+    font-size: 1em;
+}
+
+#loginContainer input:focus {
+    border-color: #4a90e2;
+    outline: none;
+}
+
+#loginContainer button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+#loginContainer button:hover {
+    background-color: #357ABD;
+}
+
+/* Message styling for login feedback */
+#loginMessage {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #e74c3c; /* Red color for error messages */
+}
+
+
+#logoutButton {
+    position: absolute;
+    right: 30px;
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+
+#logoutButton:hover {
+    background-color: #c0392b;
+}
+
+/* Main container styling */
+.container {
+    max-width: 700px;
+    width: 100%;
+    margin-top: 120px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for Add Task Form */
+.form-section {
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-section h2 {
+    color: #4a90e2;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Dropdown styling for both Add and Update forms */
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+select:focus {
+    border-color: #4a90e2;
+    outline: none;
+}
+
+/* Form Field Styling */
+#addTaskForm label {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 10px;
+    display: block;
+}
+
+#addTaskForm input,
+#addTaskForm textarea,
+#addTaskForm button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    margin-bottom: 12px;
+}
+
+#addTaskForm input:focus,
+#addTaskForm textarea:focus {
+    border-color: #4a90e2;
+    outline: none;
+}
+
+#addTaskForm textarea {
+    resize: vertical;
+}
+
+#addTaskForm button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+#addTaskForm button:hover {
+    background-color: #357ABD;
+}
+
+/* Task card styling */
+.task {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.task:hover {
+    transform: translateY(-5px);
+}
+
+.task h3 {
+    font-size: 1.3em;
+    margin-bottom: 8px;
+}
+
+.task p {
+    margin: 6px 0;
+    color: #555;
+}
+
+/* Update and Delete Buttons Styling */
+.task button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 0.9em;
+    cursor: pointer;
+    font-weight: bold;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+/* Update Button with Gradient */
+.task button:first-child {
+    background: linear-gradient(135deg, #4a90e2, #357ABD);
+}
+
+.task button:first-child:hover {
+    background: linear-gradient(135deg, #357ABD, #2C608A);
+    box-shadow: 0px 4px 10px rgba(52, 73, 94, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Delete Button with Gradient */
+.task button:last-child {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    margin-left: 10px;
+}
+
+.task button:last-child:hover {
+    background: linear-gradient(135deg, #c0392b, #a02c22);
+    box-shadow: 0px 4px 10px rgba(192, 57, 43, 0.4);
+    transform: translateY(-2px);
+}
+
+#updateModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+/* Update Task Modal Styling */
+#updateModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#updateModalContent {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px; /* Restricting max width for better layout */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#updateModalContent h3 {
+    font-size: 1.6em;
+    color: #4a90e2;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+#updateModalContent input,
+#updateModalContent textarea,
+#updateModalContent button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+#updateModalContent input:focus,
+#updateModalContent textarea:focus {
+    border-color: #4a90e2;
+    outline: none;
+}
+
+#updateModalContent textarea {
+    resize: vertical;
+    height: 80px; /* Pre-set height for better usability */
+}
+
+#updateModalContent button {
+    background-color: #4a90e2;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    padding: 10px;
+}
+
+#updateModalContent button:hover {
+    background-color: #357ABD;
+}
+
+#updateModalContent button[type="button"] {
+    background-color: #e74c3c; /* Cancel button in red */
+    margin-top: 10px;
+}
+
+#updateModalContent button[type="button"]:hover {
+    background-color: #c0392b;
+}
+/* Styling for horizontal line in Update Task form */
+#updateModalContent h3::after {
+    content: "";
+    display: block;
+    width: 50px; /* Length of the line */
+    height: 2px;
+    background-color: #4a90e2; /* Match the header color */
+    margin: 10px auto; /* Center the line with spacing */
+    border-radius: 2px;
+}
