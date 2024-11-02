@@ -80,14 +80,14 @@
     </div>
 
     <script>
-        const apiUrl = 'http://localhost/smart_builder/tasks.php';
+        const apiUrl = 'https://wmsb.ct.ws/tasks.php';
 
         async function login() {
             const username = document.getElementById("login_username").value;
             const password = document.getElementById("login_password").value;
 
             try {
-                const response = await fetch('http://localhost/smart_builder/login.php', {
+                const response = await fetch('https://wmsb.ct.ws/login.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password })
@@ -113,7 +113,7 @@
         }
 
         async function logout() {
-            const response = await fetch('http://localhost/smart_builder/logout.php', {
+            const response = await fetch('https://wmsb.ct.ws/logout.php', {
                 method: 'POST'
             });
             const result = await response.json();
